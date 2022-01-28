@@ -11,8 +11,11 @@ const apiRequest = {
       onLoading();
       const { data } = await bostaAxios.get(url);
       onSuccess(data);
-    } catch (e) {
-      onError(e);
+    } catch (error) {
+      if (error.response.status === 500) {
+        return onError("this shipment is not exist ");
+      }
+      return onError(error);
     }
   },
 };

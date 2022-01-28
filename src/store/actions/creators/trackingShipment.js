@@ -6,7 +6,10 @@ import {
   GET_TRACKING_SHIPMENT_SUCCESS,
 } from "../types/trackingShipment";
 
-export const getTrackingShipmenAction = (trackingNumber) => {
+export const getTrackingShipmenAction = (
+  trackingNumber,
+  callbackSuccess = () => {}
+) => {
   return async (dispatch) => {
     const onLoading = () => {
       dispatch({
@@ -14,10 +17,12 @@ export const getTrackingShipmenAction = (trackingNumber) => {
       });
     };
     const onSuccess = (responseData) => {
+      console.log(responseData);
       dispatch({
         type: GET_TRACKING_SHIPMENT_SUCCESS,
         payload: { data: responseData },
       });
+      callbackSuccess();
       // history.push('/talkybots');
     };
     const onError = (e) => {

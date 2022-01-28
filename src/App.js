@@ -1,18 +1,28 @@
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
-import { ThemeProvider } from "@material-ui/core";
+import { makeStyles, Paper, ThemeProvider } from "@material-ui/core";
 import theme from "./theme";
 import RoutePages from "./routes";
+import Navbar from "./components/Navbar/Component";
+import "./index.css";
+
 function App() {
+  const classes = useStyles();
   return (
     <ThemeProvider theme={theme}>
-      <div>
-        <BrowserRouter>
+      <BrowserRouter>
+        <Navbar />
+        <Paper className={classes.mainLayout} elevation={0}>
           <RoutePages />
-        </BrowserRouter>
-      </div>
+        </Paper>
+      </BrowserRouter>
     </ThemeProvider>
   );
 }
 
 export default App;
+const useStyles = makeStyles((theme) => ({
+  mainLayout: {
+    marginTop: theme.spacing(50),
+  },
+}));

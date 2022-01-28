@@ -1,5 +1,5 @@
 import React from "react";
-import TrackingSearch from "../components/TrackingSearch";
+import TrackingSearch from "../components/ShipmentSearch";
 
 const TrackingSearchPage = () => {
   return <TrackingSearch />;

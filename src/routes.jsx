@@ -6,7 +6,7 @@ import TrackingShipmentPage from "./pages/TrackingShipmentPage";
 
 const RoutePages = () => (
   <Routes>
-    <Route path="/" element={<TrackingSearchPage />} />
+    <Route exact="true" path="/" element={<TrackingSearchPage />} />
     <Route path="tracking-shipment" element={<TrackingShipmentPage />} />
     <Route path="*" element={<NotFoundPage />} />
   </Routes>
