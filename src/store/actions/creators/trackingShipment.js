@@ -17,13 +17,11 @@ export const getTrackingShipmenAction = (
       });
     };
     const onSuccess = (responseData) => {
-      console.log(responseData);
       dispatch({
         type: GET_TRACKING_SHIPMENT_SUCCESS,
         payload: { data: responseData },
       });
       callbackSuccess();
-      // history.push('/talkybots');
     };
     const onError = (e) => {
       dispatch({

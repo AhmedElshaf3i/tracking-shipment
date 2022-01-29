@@ -1,6 +1,6 @@
 import {
   Box,
-  CircularProgress,
+  // CircularProgress,
   Grid,
   makeStyles,
   TextField,
@@ -9,22 +9,23 @@ import {
 import React, { useState } from "react";
 import SearchIcon from "@material-ui/icons/Search";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 // eslint-disable-next-line react/prop-types
-const Component = ({ getTrackingShipmen, loading, error }) => {
+const Component = () => {
   const classes = useStyles();
   const [searchInput, setSearchInput] = useState();
+
   let navigate = useNavigate();
-  const callbackSuccess = () => {
-    navigate("/tracking-shipment");
-  };
+  const { t } = useTranslation();
+
   const handleChange = (e) => {
     setSearchInput(e.target.value);
   };
   const handleSearch = () => {
     console.log(searchInput);
     if (searchInput) {
-      getTrackingShipmen(searchInput, callbackSuccess);
+      navigate(`/tracking-shipment/${searchInput}`);
     }
   };
   return (
@@ -34,35 +35,47 @@ const Component = ({ getTrackingShipmen, loading, error }) => {
       alignItems="center"
       className={classes.root}
     >
-      <Box>
-        <Typography>Track your shipment</Typography>
-        <Typography>Enter your tracking No.</Typography>
+      <Box className={classes.boxWrapper}>
+        <Typography className={classes.header}>
+          {t("tracking_search.header")}
+        </Typography>
+        <Typography className={classes.description}>
+          {t("tracking_search.description")}
+        </Typography>
         <Grid container>
-          <TextField onChange={handleChange} />
+          <TextField
+            onChange={handleChange}
+            placeholder={t("tracking_search.placeholder")}
+          />
           <Grid
             container
             justifyContent="center"
             alignItems="center"
             className={classes.searchIcon}
             onClick={handleSearch}
-            disabled={loading}
           >
-            {loading ? (
-              <CircularProgress color="white" size={15} />
-            ) : (
-              <SearchIcon />
-            )}
+            <SearchIcon />
           </Grid>
         </Grid>
-        <Typography>{error}</Typography>
       </Box>
     </Grid>
   );
 };
 export default Component;
 const useStyles = makeStyles((theme) => ({
-  mainLayout: {
-    marginTop: theme.spacing(50),
+  root: {
+    height: "70vh",
+  },
+  boxWrapper: {
+    padding: theme.spacing(32),
+    boxShadow: "0px 4px 8px #dedede",
+  },
+  header: {
+    ...theme.typography.subtitle1,
+  },
+  description: {
+    ...theme.typography.body1,
+    marginBottom: theme.spacing(16),
   },
   searchIcon: {
     width: theme.spacing(50),
@@ -71,5 +84,8 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.primary.main,
     cursor: "pointer",
     marginLeft: theme.spacing(20),
+  },
+  circularProgress: {
+    color: theme.palette.common.white,
   },
 }));

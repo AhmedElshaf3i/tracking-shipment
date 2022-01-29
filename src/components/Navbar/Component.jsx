@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -7,67 +7,74 @@ import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
+import logo from "assets/images/logo.jpg";
 
 import useMediaQuery from "@material-ui/core/useMediaQuery";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
+import i18next from "i18next";
+import { useTranslation } from "react-i18next";
+import cookies from "js-cookie";
+import { Grid } from "@material-ui/core";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    backgroundColor: "transparent",
+const language = {
+  en: {
+    code: "en",
+    name: "ENG",
+    country_code: "gb",
   },
-  appbarWrapper: {
-    backgroundColor: "transparent",
+  ar: {
+    code: "ar",
+    name: "عربي",
+    dir: "rtl",
+    country_code: "ar-eg",
   },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
-  title: {
-    [theme.breakpoints.down("xs")]: {
-      flexGrow: 1,
-    },
-  },
-  headerOptions: {
-    display: "flex",
-    flex: 1,
-    justifyContent: "space-evenly",
-  },
-}));
+};
 const Navbar = () => {
-  // const window.history = usewindow.History();
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const theme = useTheme();
-
   const isMobile = useMediaQuery(theme.breakpoints.down("xs"));
+  // language
+  const { t } = useTranslation();
+  const currentLanguageCode = cookies.get("i18next") || "en";
+  const currentLanguage = language[currentLanguageCode];
+  let { pathname } = useLocation();
+
+  useEffect(() => {
+    document.body.dir = currentLanguage.dir || "ltr";
+    if (pathname === "/") {
+      document.title = t("title.home");
+    } else if (pathname.includes("tracking-shipment")) {
+      document.title = t(`title.tracking-shipment`);
+    } else {
+      document.title = t(`title.${pathname.substring(1)}`);
+    }
+    setAnchorEl(null);
+  }, [currentLanguage, t, pathname]);
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleMenuClick = () => {
-    setAnchorEl(null);
-  };
-
   const menuItems = [
     {
-      menuTitle: "Tracking Shipment",
-      pageURL: "/",
+      menuTitle: "tracking-shipment",
+      pageURL: "/tracking-shipment",
       id: "1",
     },
     {
-      menuTitle: "Pricing",
+      menuTitle: "pricing",
       pageURL: "/pricing",
       id: "2",
     },
     {
-      menuTitle: "Contact Sales",
+      menuTitle: "contact-sales",
       pageURL: "/contact-sales",
       id: "3",
     },
     {
-      menuTitle: "Sign in",
+      menuTitle: "sign-in",
       pageURL: "/sign-in",
       id: "4",
     },
@@ -75,11 +82,16 @@ const Navbar = () => {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static" className={classes.appbarWrapper} elevation={0}>
+      <AppBar position="fixed" className={classes.appbarWrapper} elevation={0}>
         <Toolbar>
-          <Typography variant="h6" className={classes.title}>
-            Photos
-          </Typography>
+          <NavLink to="/" className={classes.title}>
+            <Grid container alignItems="center">
+              <img src={logo} alt="bosta logo" />
+              <Typography className={classes.companyName}>
+                {t("companyName")}
+              </Typography>
+            </Grid>
+          </NavLink>
           {isMobile ? (
             <>
               <IconButton
@@ -89,7 +101,7 @@ const Navbar = () => {
                 aria-label="menu"
                 onClick={handleMenu}
               >
-                <MenuIcon />
+                <MenuIcon color="primary" fontSize="large" />
               </IconButton>
               <Menu
                 id="menu-appbar"
@@ -109,14 +121,49 @@ const Navbar = () => {
                 {menuItems.map((menuItem) => {
                   const { menuTitle, pageURL } = menuItem;
                   return (
-                    <MenuItem
-                      key={menuItem.id}
-                      onClick={() => handleMenuClick(pageURL)}
-                    >
-                      {menuTitle}
+                    <MenuItem key={menuItem.id}>
+                      <NavLink
+                        exact="true"
+                        to={pageURL}
+                        style={({ isActive }) => {
+                          return {
+                            color: isActive
+                              ? theme.palette.primary.main
+                              : theme.palette.common.black,
+                            textDecoration: "none",
+                          };
+                        }}
+                      >
+                        {t(`title.${menuTitle}`)}
+                      </NavLink>
                     </MenuItem>
                   );
                 })}
+                <MenuItem>
+                  {currentLanguage?.code === language?.en?.code ? (
+                    <span
+                      style={{
+                        color: theme.palette.primary.main,
+                      }}
+                      onClick={() => {
+                        i18next.changeLanguage(language?.ar?.code);
+                      }}
+                    >
+                      {language?.ar?.name}
+                    </span>
+                  ) : (
+                    <span
+                      style={{
+                        color: theme.palette.primary.main,
+                      }}
+                      onClick={() => {
+                        i18next.changeLanguage(language?.en?.code);
+                      }}
+                    >
+                      {language?.en?.name}
+                    </span>
+                  )}
+                </MenuItem>
               </Menu>
             </>
           ) : (
@@ -126,62 +173,90 @@ const Navbar = () => {
                 to="/"
                 style={({ isActive }) => {
                   return {
-                    display: "block",
-                    margin: "1rem 0",
-                    color: isActive ? theme.palette.primary.main : "",
+                    color: isActive
+                      ? theme.palette.primary.main
+                      : theme.palette.common.black,
+                    textDecoration: "none",
                   };
                 }}
               >
-                Home
+                {t("title.home")}
               </NavLink>
               <NavLink
                 to="/pricing"
                 style={({ isActive }) => {
                   return {
-                    display: "block",
-                    margin: "1rem 0",
-                    color: isActive ? theme.palette.primary.main : "",
+                    color: isActive
+                      ? theme.palette.primary.main
+                      : theme.palette.common.black,
+                    textDecoration: "none",
                   };
                 }}
               >
-                Pricing
+                {t("title.pricing")}
               </NavLink>
               <NavLink
                 to="/contact-sales"
                 style={({ isActive }) => {
                   return {
-                    display: "block",
-                    margin: "1rem 0",
-                    color: isActive ? theme.palette.primary.main : "",
+                    color: isActive
+                      ? theme.palette.primary.main
+                      : theme.palette.common.black,
+                    textDecoration: "none",
                   };
                 }}
               >
-                Contact Sales
+                {t("title.contact-sales")}
               </NavLink>
               <NavLink
-                to="/"
+                to="/tracking-shipment"
                 style={({ isActive }) => {
                   return {
-                    display: "block",
-                    margin: "1rem 0",
-                    color: isActive ? theme.palette.primary.main : "",
+                    color: isActive
+                      ? theme.palette.primary.main
+                      : theme.palette.common.black,
+                    textDecoration: "none",
                   };
                 }}
               >
-                Tracking Shipment
+                {t("title.tracking-shipment")}
               </NavLink>
               <NavLink
                 to="/sign-in"
                 style={({ isActive }) => {
                   return {
-                    display: "block",
-                    margin: "1rem 0",
-                    color: isActive ? theme.palette.primary.main : "",
+                    color: isActive
+                      ? theme.palette.primary.main
+                      : theme.palette.common.black,
+                    textDecoration: "none",
                   };
                 }}
               >
-                Sign in
+                {t("title.sign-in")}
               </NavLink>
+              {currentLanguage?.code === language?.en?.code ? (
+                <span
+                  style={{
+                    color: theme.palette.primary.main,
+                  }}
+                  onClick={() => {
+                    i18next.changeLanguage(language?.ar?.code);
+                  }}
+                >
+                  {language?.ar?.name}
+                </span>
+              ) : (
+                <span
+                  style={{
+                    color: theme.palette.primary.main,
+                  }}
+                  onClick={() => {
+                    i18next.changeLanguage(language?.en?.code);
+                  }}
+                >
+                  {language?.en?.name}
+                </span>
+              )}
             </div>
           )}
         </Toolbar>
@@ -191,3 +266,37 @@ const Navbar = () => {
 };
 
 export default Navbar;
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+    backgroundColor: "transparent",
+    ...theme.typography.subtitle1,
+  },
+  appbarWrapper: {
+    backgroundColor: theme.palette.common.white,
+    borderBottom: `1px solid ${theme.palette.grey[300]}`,
+    [theme.breakpoints.down("sm")]: {
+      paddingLeft: "1rem",
+    },
+    paddingLeft: "10rem",
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+  },
+  title: {
+    [theme.breakpoints.down("xs")]: {
+      flexGrow: 1,
+    },
+    textDecoration: "none",
+    color: theme.palette.primary.main,
+  },
+  companyName: {
+    ...theme.typography.h4,
+    paddingLeft: "1rem",
+  },
+  headerOptions: {
+    display: "flex",
+    flex: 1,
+    justifyContent: "space-evenly",
+  },
+}));

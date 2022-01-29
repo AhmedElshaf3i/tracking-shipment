@@ -22,27 +22,33 @@ body {
 @media screen and (min-width: 1200px) and (max-width: 1599px) {
   body,
   html {
-    font-size: 13px !important;
+    font-size: 15px !important;
   }
 }
 
 @media screen and (min-width: 992px) and (max-width: 1199px) {
   body,
   html {
+    font-size: 14px !important;
+  }
+}
+@media screen and (min-width: 700px) and (max-width: 991px) {
+  body,
+  html {
+    font-size: 13px !important;
+  }
+}
+
+@media screen and (min-width: 500px) and (max-width: 699px) {
+  body,
+  html {
+    font-size: 12px !important;
+  }
+}
+
+@media screen and (max-width: 499px) {
+  body,
+  html {
     font-size: 11px !important;
-  }
-}
-
-@media screen and (min-width: 600px) and (max-width: 991px) {
-  body,
-  html {
-    font-size: 10px !important;
-  }
-}
-
-@media screen and (max-width: 599px) {
-  body,
-  html {
-    font-size: 8px !important;
   }
 }
