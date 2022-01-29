@@ -34,7 +34,10 @@ export default TrackingTable;
 const useStyles = makeStyles((theme) => ({
   container: {},
   shipmentLocationWrapper: {
-    marginLeft: theme.spacing(50),
+    [theme.breakpoints.up("md")]: {
+      marginLeft: theme.spacing(50),
+    },
+    flexGrow: 1,
   },
   sectionHeader: {
     ...theme.typography.subtitle2,
