@@ -16,6 +16,7 @@ const TrackingCurrentState = ({ trackingInfo }) => {
   return (
     <Box className={classes.stepperHeaderWrapper}>
       <Grid container spacing={9}>
+        {/* tracking nember */}
         <Grid item xs={6} md={3}>
           <Typography className={classes.statusHeaderText}>
             {t("trackingStatus.TrackingNumber")} : {TrackingNumber}
@@ -30,6 +31,7 @@ const TrackingCurrentState = ({ trackingInfo }) => {
           )}
           <div className={classes.dividerInSmallScreen} />
         </Grid>
+        {/* last update */}
         <Grid item xs={6} md={3}>
           <Typography className={classes.statusHeaderText}>
             {t("trackingStatus.LastUpdated")}
@@ -43,6 +45,7 @@ const TrackingCurrentState = ({ trackingInfo }) => {
           )}
           <div className={classes.dividerInSmallScreen} />
         </Grid>
+        {/* mechant name */}
         <Grid item xs={6} md={3}>
           <Typography className={classes.statusHeaderText}>
             {t("trackingStatus.MerchantName")}
@@ -53,6 +56,7 @@ const TrackingCurrentState = ({ trackingInfo }) => {
             </Typography>
           )}
         </Grid>
+        {/* delivery time */}
         <Grid item xs={6} md={3}>
           <Typography className={classes.statusHeaderText}>
             {t("trackingStatus.DeliveryTimeWithin")}
