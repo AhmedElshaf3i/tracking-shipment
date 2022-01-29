@@ -46,6 +46,7 @@ const ShipmentStepper = ({ trackingInfo }) => {
       </div>
     );
   }
+
   return (
     <Stepper
       active={true}
@@ -58,26 +59,31 @@ const ShipmentStepper = ({ trackingInfo }) => {
         ) + 1
       }
     >
-      {TransitEvents?.map((event, i) => (
-        <Step key={i}>
-          <StepLabel StepIconComponent={QontoStepIcon}>
-            <Typography className={classes.labelStyle}>
-              {t(`tracking.${event?.state}`) || ""}
-            </Typography>
-            {event?.reason && (
-              <Typography
-                className={classes.reasonStyle}
-                style={{ color: statusColor }}
-              >
-                {event?.reason}
+      {TransitEvents?.map((event, i) =>
+        t(`tracking.${event?.state}`, "") ? (
+          <Step key={i}>
+            <StepLabel StepIconComponent={QontoStepIcon}>
+              <Typography className={classes.labelStyle}>
+                {t(`tracking.${event?.state}`, "")}
               </Typography>
-            )}
-          </StepLabel>
-        </Step>
-      ))}
+              {event?.reason && (
+                <Typography
+                  className={classes.reasonStyle}
+                  style={{ color: statusColor }}
+                >
+                  {event?.reason}
+                </Typography>
+              )}
+            </StepLabel>
+          </Step>
+        ) : (
+          <></>
+        )
+      )}
     </Stepper>
   );
 };
+
 export default ShipmentStepper;
 const useStyles = makeStyles((theme) => ({
   stepperWrapper: {},

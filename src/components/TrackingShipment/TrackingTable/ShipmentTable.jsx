@@ -68,7 +68,7 @@ const ShipmentTable = ({ trackingInfo }) => {
               </TableCell>
               <TableCell>
                 <Typography className={classes.tableRowCell}>
-                  {t(`tracking.${event?.state}`) || ""}
+                  {t(`tracking.${event?.state}`, "")}
                 </Typography>
                 {event?.reason && (
                   <Typography
