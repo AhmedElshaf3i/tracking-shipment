@@ -24,10 +24,10 @@ const ShipmentLocation = () => {
       </Box>
       <Box className={classes.reportProblemWrapper}>
         <Grid container alignItems="center">
-          <Grid item xs={3}>
-            <img src={reportProblemImg} />
+          <Grid item xs={4} sm={3} md={4} xl={3}>
+            <img src={reportProblemImg} alt={t("reportProblem.question")} />
           </Grid>
-          <Grid item xs={8}>
+          <Grid item xs={7}>
             <Typography className={classes.reportQuestion}>
               {t("reportProblem.question")}
             </Typography>
